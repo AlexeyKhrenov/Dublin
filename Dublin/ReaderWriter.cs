@@ -30,7 +30,7 @@ namespace Dublin
             return start;
         }
 
-        public void WriteBlock(Stream source, int position)
+        public void Write(Stream source, int position)
         {
             output.Position = position;
             source.CopyTo(output);

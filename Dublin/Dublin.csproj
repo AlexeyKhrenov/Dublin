@@ -43,8 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileMetadata.cs" />
+    <Compile Include="Metadata.cs" />
     <Compile Include="IConcurrentReaderWriter.cs" />
+    <Compile Include="MetadataRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReaderWriter.cs" />

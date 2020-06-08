@@ -31,7 +31,7 @@ namespace Dublin
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 readerWriter.ReadNext(gzipStream, blockSize);
-                readerWriter.Write(buffer, position);
+                // readerWriter.Write(buffer, position);
             }
         }
 

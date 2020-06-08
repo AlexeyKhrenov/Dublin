@@ -10,7 +10,6 @@ namespace Dublin
     {
         static void Main(string[] args)
         {
-            new ReaderWriter().Run();
         }
     }
 }
