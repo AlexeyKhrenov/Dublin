@@ -6,12 +6,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Dublin
+namespace Dublin.FileStructure
 {
-    /// <summary>
-    /// Maximum number of records - int.Max
-    /// </summary>
-    public class Metadata
+    public class FileMetadata
     {
         public Queue<MetadataRecord> Records = new Queue<MetadataRecord>();
 
@@ -22,16 +19,31 @@ namespace Dublin
             Records.Enqueue(metadataRecord);
         }
 
+        public bool TryGetNextRecord(out MetadataRecord record)
+        {
+            if (!Records.Any())
+            {
+                record = default;
+                return false;
+            }
+            else
+            {
+                record = Records.Dequeue();
+                return true;
+            }
+        }
+
         /// <summary>
         /// Throws ArgumentException if input stream has incorrect format.
         /// Read metadata from end of the stream. 
         /// Sets stream position back after read.
+        /// Returns start position of metadata
         /// </summary>
-        public void Read(Stream stream)
+        public long Read(Stream stream)
         {
             if (stream.Length == 0)
             {
-                return;
+                return 0;
             }
 
             if (stream.Length < 4)
@@ -41,6 +53,8 @@ namespace Dublin
 
             using (var binaryReader = new BinaryReader(stream))
             {
+                var savedStreamPosition = stream.Position;
+
                 var start = 0;
                 var buffer = new long[recordSize / 8];
                 var bufferGCHandle = GCHandle.Alloc(buffer, GCHandleType.Pinned);
@@ -67,20 +81,29 @@ namespace Dublin
                 }
                 finally
                 {
+                    stream.Position = savedStreamPosition;
                     bufferGCHandle.Free();
                 }
+
+                return -4 - (long)(start * recordSize);
             }
         }
 
         /// <summary>
         /// Writes current metadata state at the end of the stream. 
         /// Sets stream position at the end of the stream after write.
-        /// Adds additional 4 bytes to track number of records.
+        /// Adds additional 4 bytes to track number of records if there're records
         /// </summary>
         public void Write(Stream stream)
         {
             stream.Seek(0, SeekOrigin.End);
             int numberOfRecords = Records.Count;
+
+            if (numberOfRecords == 0)
+            {
+                return;
+            }
+
             var buffer = new byte[recordSize];
             IntPtr ptr = Marshal.AllocHGlobal(recordSize);
 

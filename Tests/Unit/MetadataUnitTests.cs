@@ -1,12 +1,9 @@
 ﻿using Dublin;
+using Dublin.FileStructure;
 using FluentAssertions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests.Unit
 {
@@ -16,7 +13,7 @@ namespace Tests.Unit
         [TestMethod]
         public void MetadataUnitTest_1()
         {
-            var metadata = new Metadata();
+            var metadata = new FileMetadata();
             using (var ms = new MemoryStream())
             {
                 ms.Write(new byte[] { 2, 3 }, 0, 2);
@@ -53,7 +50,7 @@ namespace Tests.Unit
                 1, 0, 0, 0 // number of records at the end
             };
 
-            var metadata = new Metadata();
+            var metadata = new FileMetadata();
 
             using (var ms = new MemoryStream())
             {
@@ -61,7 +58,7 @@ namespace Tests.Unit
                 metadata.Read(ms);
             }
 
-            var expectedMetadata = new Metadata();
+            var expectedMetadata = new FileMetadata();
             expectedMetadata.AddRecord(new MetadataRecord(3, 5, 10, 0));
 
             metadata.Should().BeEquivalentTo(expectedMetadata);
@@ -70,7 +67,7 @@ namespace Tests.Unit
         [TestMethod]
         public void MetadataUnitTest_3()
         {
-            var source = new Metadata();
+            var source = new FileMetadata();
             using (var ms = new MemoryStream())
             {
                 ms.Write(new byte[] { 2, 3 }, 0, 2);
@@ -89,7 +86,7 @@ namespace Tests.Unit
 
                 source.Write(ms);
 
-                var target = new Metadata();
+                var target = new FileMetadata();
                 target.Read(ms);
 
                 var targetRecords = target.Records.ToArray();
@@ -101,7 +98,7 @@ namespace Tests.Unit
         [TestMethod]
         public void MetadataUnitTest_4()
         {
-            var source = new Metadata();
+            var source = new FileMetadata();
             using (var ms = new MemoryStream())
             {
                 var sourceRecords = new MetadataRecord[3]
@@ -118,12 +115,45 @@ namespace Tests.Unit
 
                 source.Write(ms);
 
-                var target = new Metadata();
+                var target = new FileMetadata();
                 target.Read(ms);
 
                 var targetRecords = target.Records.ToArray();
 
                 sourceRecords.Should().BeEquivalentTo(targetRecords);
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void MetadataUnitTest_5()
+        {
+            var metadata = new FileMetadata();
+            using (var ms = new MemoryStream())
+            {
+                ms.Write(new byte[] { 2, 3 }, 0, 2);
+                metadata.Read(ms);
+            }
+        }
+
+        [TestMethod]
+        public void MetadataUnitTest_6()
+        {
+            var metadata = new FileMetadata();
+            using (var ms = new MemoryStream())
+            {
+                metadata.Read(ms);
+            }
+        }
+
+        [TestMethod]
+        public void MetadataUnitTest_7()
+        {
+            var metadata = new FileMetadata();
+            using (var ms = new MemoryStream())
+            {
+                metadata.Write(ms);
+                ms.Length.Should().Be(0);
             }
         }
     }

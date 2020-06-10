@@ -56,6 +56,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Unit\GzipCompressorUnitTests.cs" />
+    <Compile Include="Unit\GzipDecompressorUnitTest.cs" />
     <Compile Include="Unit\MetadataUnitTests.cs" />
   </ItemGroup>
   <ItemGroup>

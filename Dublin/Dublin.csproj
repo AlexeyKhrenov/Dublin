@@ -43,13 +43,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Metadata.cs" />
-    <Compile Include="IConcurrentReaderWriter.cs" />
-    <Compile Include="MetadataRecord.cs" />
+    <Compile Include="GzipWorkers\Compressor.cs" />
+    <Compile Include="GzipWorkers\Decompressor.cs" />
+    <Compile Include="FileStructure\Block.cs" />
+    <Compile Include="GzipWorkers\IGzipWorker.cs" />
+    <Compile Include="Orchestrator.cs" />
+    <Compile Include="ReaderWriterWorkers\CompressorWorker.cs" />
+    <Compile Include="ReaderWriterWorkers\ConcurrentQueue.cs" />
+    <Compile Include="FileStructure\FileMetadata.cs" />
+    <Compile Include="FileStructure\MetadataRecord.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReaderWriter.cs" />
-    <Compile Include="Compressor.cs" />
+    <Compile Include="ReaderWriterWorkers\AbstractWorker.cs" />
+    <Compile Include="ReaderWriterWorkers\DecompressorWorker.cs" />
+    <Compile Include="ReaderWriterWorkers\IReaderWriter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
