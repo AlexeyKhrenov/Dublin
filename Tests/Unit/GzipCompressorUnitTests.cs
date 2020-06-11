@@ -14,8 +14,8 @@ namespace Tests.Unit
         public void GzipCompressorUnitTest_1()
         {
             var compressor = CreateCompressor();
-            var source = Block.CreateBlockForCompression(0, 10);
-            source.Content = new byte[] { 2, 3, 4, 0, 1, 2, 4, 9, 2, 0 };
+            var source = Block.CreateBlockForCompression(0, 18);
+            source.Content = new byte[] { 2, 3, 4, 0, 1, 2, 4, 9, 2, 0, 23, 52, 2, 2, 2, 3, 5, 0 };
             compressor.ReadQueue.Enqueue(source);
             compressor.ReadQueue.Close();
 

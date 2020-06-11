@@ -9,33 +9,34 @@ using System.Threading.Tasks;
 
 namespace Dublin.ReaderWriterWorkers
 {
-    public sealed class CompressorWorker : AbstractWorker
+    public sealed class CompressorReaderWriter : AbstractWorker
     {
-        private FileMetadata fileMetadata;
+        public FileMetadata FileMetadata { get; }
 
-        public CompressorWorker(
+        public CompressorReaderWriter(
             Stream input,
             Stream output,
             int readQueueSize,
             int writeQueueSize,
             int blockSize) : base(input, output, readQueueSize, writeQueueSize, blockSize)
         {
-            fileMetadata = new FileMetadata();
+            FileMetadata = new FileMetadata();
         }
 
         public override void ReadNext()
         {
             var start = input.Position;
 
-            var left = input.Length - blockSize;
+            var left = input.Length - input.Position;
+            var nextBlockSize = blockSize < left ? blockSize : (int)left;
 
-            var block = Block.CreateBlockForCompression(start, blockSize < left ? (int)left : blockSize);
-            input.Read(block.Content, 0, blockSize);
+            var block = Block.CreateBlockForCompression(start, nextBlockSize);
+            input.Read(block.Content, 0, nextBlockSize);
 
             ReadQueue.Enqueue(block);
         }
 
-        public override void WriteNext()
+        public override bool TryWriteNext()
         {
             if (WriteQueue.TryDequeue(out var block))
             {
@@ -47,14 +48,17 @@ namespace Dublin.ReaderWriterWorkers
                 block.AddCompressedPositionStart(output.Position);
 
                 output.Write(block.Content, 0, block.Size);
-                fileMetadata.AddRecord(block.Metadata);
+                FileMetadata.AddRecord(block.Metadata);
+                return true;
             }
+
+            return false;
         }
 
-        public override void Close()
+        public override void Finish()
         {
-            base.Close();
-            fileMetadata.Write(output);
+            base.Finish();
+            FileMetadata.Write(output);
         }
     }
 }

@@ -2,10 +2,11 @@
 using Dublin.ReaderWriterWorkers;
 using System;
 using System.IO;
+using System.Threading;
 
 namespace Dublin
 {
-    public abstract class AbstractWorker : IDisposable
+    public abstract class AbstractWorker : IReaderWriter
     {
         public ConcurrentQueue<Block> ReadQueue { get; private set; }
 
@@ -34,40 +35,40 @@ namespace Dublin
             this.blockSize = blockSize;
         }
 
-        public void Process()
+        public void Process(CancellationToken ct)
         {
             while (CanRead)
             {
+                ct.ThrowIfCancellationRequested();
+
                 while (!WriteQueue.IsEmpty && !ReadQueue.IsEmpty)
                 {
-                    WriteNext();
+                    TryWriteNext();
                 }
 
-                if (ReadQueue.IsEmpty)
-                {
-                    ReadNext();
-                }
+                ReadNext();
             }
 
             ReadQueue.Close();
+
+            while (TryWriteNext())
+            {
+            }
+
+            Finish();
         }
 
         public abstract void ReadNext();
 
-        public abstract void WriteNext();
+        public abstract bool TryWriteNext();
 
-        public virtual void Close()
+        public virtual void Finish()
         {
-            while (!WriteQueue.IsEmpty)
-            {
-                WriteNext();
-            }
         }
 
-        public void Dispose()
+        public void Close()
         {
-            input.Dispose();
-            output.Dispose();
+            WriteQueue.Close();
         }
     }
 }

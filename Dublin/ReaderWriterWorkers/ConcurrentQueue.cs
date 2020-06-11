@@ -9,9 +9,9 @@ namespace Dublin.ReaderWriterWorkers
     {
         private readonly Queue<T> queue = new Queue<T>();
         private readonly int maxSize;
-        private bool closed;
+        private volatile bool closed;
 
-        public bool IsEmpty => !queue.Any();
+        public bool IsEmpty => queue.Count == 0;
 
         public ConcurrentQueue(int maxSize)
         {

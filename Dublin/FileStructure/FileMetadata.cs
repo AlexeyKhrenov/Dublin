@@ -51,7 +51,7 @@ namespace Dublin.FileStructure
                 throw new ArgumentException("Invalid input stream");
             }
 
-            using (var binaryReader = new BinaryReader(stream))
+            using (var binaryReader = new BinaryReader(stream, Encoding.Default, true))
             {
                 var savedStreamPosition = stream.Position;
 

@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Dublin.ReaderWriterWorkers
 {
-    public sealed class DecompressorWorker : AbstractWorker
+    public sealed class DecompressorReaderWriter : AbstractWorker
     {
         private FileMetadata fileMetadata;
 
         private bool _canRead;
         protected override bool CanRead => _canRead;
 
-        public DecompressorWorker(
+        public DecompressorReaderWriter(
             Stream input,
             Stream output,
             int readQueueSize,
@@ -43,7 +43,7 @@ namespace Dublin.ReaderWriterWorkers
             }
         }
 
-        public override void WriteNext()
+        public override bool TryWriteNext()
         {
             if (WriteQueue.TryDequeue(out var block))
             {
@@ -54,7 +54,10 @@ namespace Dublin.ReaderWriterWorkers
 
                 output.Position = block.Metadata.Start;
                 output.Write(block.Content, 0, block.Size);
+                return true;
             }
+
+            return false;
         }
     }
 }

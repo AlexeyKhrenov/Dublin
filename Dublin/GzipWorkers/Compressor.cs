@@ -37,7 +37,11 @@ namespace Dublin.GzipWorkers
             using (var zipStream = new GZipStream(compressedStream, CompressionMode.Compress))
             {
                 zipStream.Write(source.Content, 0, source.Size);
-                var result = Block.CreateCompressedBlock(source, compressedStream.ToArray());
+                zipStream.Close();
+
+                var compressedBytes = compressedStream.ToArray();
+
+                var result = Block.CreateCompressedBlock(source, compressedBytes);
                 WriteQueue.Enqueue(result);
                 return result;
             }

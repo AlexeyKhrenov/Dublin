@@ -22,7 +22,26 @@ namespace Dublin
 
         public void Start(CancellationToken ct)
         {
-            throw new NotImplementedException();
+            var gzipThreads = new Thread[gzipWorkers.Length];
+
+            for (var i = 0; i < gzipWorkers.Length; i++)
+            {
+                var l = i;
+                gzipThreads[l] = new Thread(() => gzipWorkers[l].Process(ct));
+                gzipThreads[l].Start();
+            }
+
+            var writerThread = new Thread(() => readerWriter.Process(ct));
+            writerThread.Start();
+
+            foreach (var thread in gzipThreads)
+            {
+                thread.Join();
+            }
+
+            readerWriter.Close();
+
+            writerThread.Join();
         }
     }
 }

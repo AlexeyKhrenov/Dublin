@@ -15,5 +15,7 @@ namespace Dublin.ReaderWriterWorkers
         ConcurrentQueue<Block> WriteQueue { get; }
 
         void Process(CancellationToken ct);
+
+        void Close();
     }
 }

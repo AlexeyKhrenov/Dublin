@@ -61,7 +61,7 @@ namespace Dublin.FileStructure
 
             result.Metadata = new MetadataRecord(
                 sourceBlock.Metadata.Start,
-                sourceBlock.Metadata.Length);
+                content.Length);
 
             return result;
         }
