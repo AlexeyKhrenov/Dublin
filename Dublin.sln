@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dublin", "Dublin\Dublin.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{D584A7B3-C431-4CEE-A0C0-4F102FDFD93B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Benchmarking", "Benchmarking\Benchmarking.csproj", "{E1785BAF-8DDC-4761-8B5E-D4F69840E76E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D584A7B3-C431-4CEE-A0C0-4F102FDFD93B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D584A7B3-C431-4CEE-A0C0-4F102FDFD93B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D584A7B3-C431-4CEE-A0C0-4F102FDFD93B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1785BAF-8DDC-4761-8B5E-D4F69840E76E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1785BAF-8DDC-4761-8B5E-D4F69840E76E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1785BAF-8DDC-4761-8B5E-D4F69840E76E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1785BAF-8DDC-4761-8B5E-D4F69840E76E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
