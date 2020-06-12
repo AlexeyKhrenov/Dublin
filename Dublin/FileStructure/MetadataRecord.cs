@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dublin.FileStructure
+﻿namespace Dublin.FileStructure
 {
     /// <summary>
     /// Size - 32 bytes
@@ -32,7 +26,5 @@ namespace Dublin.FileStructure
             StartCompressed = startCompressed;
             LengthCompressed = lengthCompressed;
         }
-
-        
     }
 }
