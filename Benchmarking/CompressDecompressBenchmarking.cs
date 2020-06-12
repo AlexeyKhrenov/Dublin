@@ -8,10 +8,10 @@ namespace Benchmarking
 {
     public class CompressDecompressBenchmarking
     {
-        [Params(64, 128, 256, 512, 1024)]
+        [Params(128)]
         public int ReadQueueSize { get; set; }
 
-        [Params(64, 128, 256, 512, 1024)]
+        [Params(128)]
         public int WriteQueueSize { get; set; }
 
         [Params(1024, 4 * 1024, 64 * 1024, 256 * 1024, 1024 * 1024)]

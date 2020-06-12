@@ -261,6 +261,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Runs.txt" />
     <Content Include="SampleText.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
