@@ -1,20 +1,14 @@
 ﻿using Dublin.FileStructure;
 using Dublin.ReaderWriterWorkers;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests.Unit
 {
-    [TestClass]
     public class CompressorReaderWriterUnitTests
     {
-        [TestMethod]
+        [Fact]
         public void CompressorReaderWriterUnitTest_1()
         {
             using (var ms = new MemoryStream(new byte[]{ 20, 10, 3, 5, 15, 15, 32, 64, 8 }))
@@ -33,7 +27,7 @@ namespace Tests.Unit
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void CompressorReaderWriterUnitTest_2()
         {
             using (var ms = new MemoryStream(new byte[] { 20, 10, 3, 5, 15, 15, 32, 64, 8 }))

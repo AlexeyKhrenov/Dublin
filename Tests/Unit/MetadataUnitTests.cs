@@ -1,16 +1,15 @@
 ﻿using Dublin;
 using Dublin.FileStructure;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
+using Xunit;
 
 namespace Tests.Unit
 {
-    [TestClass]
     public class MetadataUnitTests
     {
-        [TestMethod]
+        [Fact]
         public void MetadataUnitTest_1()
         {
             var metadata = new FileMetadata();
@@ -37,7 +36,7 @@ namespace Tests.Unit
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void MetadataUnitTest_2()
         {
             var sourceBytes = new byte[]
@@ -64,7 +63,7 @@ namespace Tests.Unit
             metadata.Should().BeEquivalentTo(expectedMetadata);
         }
 
-        [TestMethod]
+        [Fact]
         public void MetadataUnitTest_3()
         {
             var source = new FileMetadata();
@@ -95,7 +94,7 @@ namespace Tests.Unit
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void MetadataUnitTest_4()
         {
             var source = new FileMetadata();
@@ -124,19 +123,18 @@ namespace Tests.Unit
             }
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
+        [Fact]
         public void MetadataUnitTest_5()
         {
             var metadata = new FileMetadata();
             using (var ms = new MemoryStream())
             {
                 ms.Write(new byte[] { 2, 3 }, 0, 2);
-                metadata.Read(ms);
+                Assert.Throws<ArgumentException>(() => metadata.Read(ms).Should());
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void MetadataUnitTest_6()
         {
             var metadata = new FileMetadata();
@@ -146,7 +144,7 @@ namespace Tests.Unit
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void MetadataUnitTest_7()
         {
             var metadata = new FileMetadata();

@@ -2,15 +2,14 @@
 using Dublin.GzipWorkers;
 using Dublin.ReaderWriterWorkers;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
+using Xunit;
 
 namespace Tests.Unit
 {
-    [TestClass]
     public class GzipCompressorUnitTests
     {
-        [TestMethod]
+        [Fact]
         public void GzipCompressorUnitTest_1()
         {
             var compressor = CreateCompressor();

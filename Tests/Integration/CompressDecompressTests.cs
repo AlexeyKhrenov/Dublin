@@ -2,16 +2,15 @@
 using Dublin.GzipWorkers;
 using Dublin.ReaderWriterWorkers;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text;
 using System.Threading;
+using Xunit;
 
 namespace Tests.Integration
 {
-    [TestClass]
     public class CompressDecompressTests
     {
-        [TestMethod]
+        [Fact]
         public void CompressDecompressTest_1()
         {
             UnicodeEncoding uniEncode = new UnicodeEncoding();

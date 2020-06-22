@@ -1,21 +1,14 @@
 ﻿using Dublin.FileStructure;
 using Dublin.ReaderWriterWorkers;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests.Unit
 {
-    [TestClass]
     public class DecompressorReaderWriterUnitTests
     {
-        [TestMethod]
+        [Fact]
         public void DecompressorReaderWriterUnitTest_1()
         {
             var input = new byte[]
@@ -56,7 +49,7 @@ namespace Tests.Unit
             }
         }
 
-        [TestMethod]
+        [Fact]
         public void DecompressorReaderWriterUnitTest_2()
         {
             var block1 = Block.CreateBlockForDecompression(8, 1, 0, 1);

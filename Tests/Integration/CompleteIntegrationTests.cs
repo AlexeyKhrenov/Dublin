@@ -1,21 +1,14 @@
 ﻿using Dublin;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using Xunit;
 
 namespace Tests.Integration
 {
-    [TestClass]
     public class CompleteIntegrationTests
     {
-        [TestMethod]
+        [Fact]
         public void CompleteIntegrationTests_1()
         {
             var inputFile = @"./Integration/TestSample.txt";

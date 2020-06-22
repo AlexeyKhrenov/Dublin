@@ -2,15 +2,14 @@
 using Dublin.GzipWorkers;
 using Dublin.ReaderWriterWorkers;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
+using Xunit;
 
 namespace Tests.Unit
 {
-    [TestClass]
     public class GzipDecompressorUnitTests
     {
-        [TestMethod]
+        [Fact]
         public void GzipDecompressorUnitTest()
         {
             var decompressor = CreateDeCompressor();

@@ -1,13 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.IO.Compression;
-using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Threading;
-using System.Threading.Tasks;
 
+using Microsoft.Extensions.Configuration;
+
+[assembly: InternalsVisibleTo("Benchmarking")]
+[assembly: InternalsVisibleTo("Tests")]
 namespace Dublin
 {
     class Program
@@ -25,12 +26,14 @@ namespace Dublin
 
                 var mode = ParseCompressDecomress(args[0]);
 
+                var conf = GetConfiguration();
+
                 builder = new Builder(
                     args[1],
                     args[2],
-                    GetValueFromConfig("ReadQueueSize"),
-                    GetValueFromConfig("WriteQueueSize"),
-                    GetValueFromConfig("BlockSize"));
+                    GetValueFromConfig(conf, "ReadQueueSize"),
+                    GetValueFromConfig(conf, "WriteQueueSize"),
+                    GetValueFromConfig(conf, "BlockSize"));
 
                 var orc = builder.BuildOrchestrator(mode);
 
@@ -99,9 +102,9 @@ namespace Dublin
             Console.WriteLine("ERROR: " + ex.Message);
         }
 
-        private static int GetValueFromConfig(string name)
+        private static int GetValueFromConfig(IConfigurationRoot conf, string name)
         {
-            var a = ConfigurationManager.AppSettings[name];
+            var a = conf.GetSection(name).Value;
             if (string.IsNullOrEmpty(a))
             {
                 throw new ArgumentException($"Value {name} is not specified in App.config");
@@ -112,6 +115,14 @@ namespace Dublin
             }
 
             return result;
+        }
+
+        private static IConfigurationRoot GetConfiguration()
+        {
+            return new ConfigurationBuilder()
+                            .SetBasePath(Directory.GetCurrentDirectory())
+                            .AddJsonFile("appsettings.json")
+                            .Build();
         }
     }
 }
