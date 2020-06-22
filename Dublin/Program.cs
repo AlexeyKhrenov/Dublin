@@ -35,7 +35,7 @@ namespace Dublin
                     GetValueFromConfig(conf, "WriteQueueSize"),
                     GetValueFromConfig(conf, "BlockSize"));
 
-                var orc = builder.BuildOrchestrator(mode);
+                var orc = builder.BuildOrchestrator(mode, Environment.ProcessorCount);
 
                 var cts = new CancellationTokenSource();
                 var orcThread = new Thread(() => orc.Start(cts.Token));

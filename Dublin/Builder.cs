@@ -38,7 +38,7 @@ namespace Dublin
             outputStream = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
         }
 
-        public Orchestrator BuildOrchestrator(CompressionMode compressionMode)
+        public Orchestrator BuildOrchestrator(CompressionMode compressionMode, int processorCount)
         {
             IReaderWriter readerWriter;
             IGzipWorker[] workers = new IGzipWorker[Environment.ProcessorCount];

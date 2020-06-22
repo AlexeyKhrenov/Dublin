@@ -27,12 +27,12 @@ namespace Benchmarking
             try
             {
                 var builder = new Builder(inputFile, outputFile, ReadQueueSize, WriteQueueSize, BlockSize);
-                var compress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Compress);
+                var compress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Compress, Environment.ProcessorCount);
                 compress.Start(new CancellationToken());
                 builder.Dispose();
 
                 builder = new Builder(outputFile, result, ReadQueueSize, WriteQueueSize, BlockSize);
-                var decompress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Decompress);
+                var decompress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Decompress, Environment.ProcessorCount);
                 decompress.Start(new CancellationToken());
                 builder.Dispose();
 

@@ -5,12 +5,19 @@ using System.IO;
 using System.Threading;
 using Xunit;
 
+[assembly: CollectionBehavior(DisableTestParallelization = true)]
 namespace Tests.Integration
 {
-    public class CompleteIntegrationTests
+    public class DifferentProcessorsCountTests
     {
-        [Fact]
-        public void CompleteIntegrationTests_1()
+
+        [Theory]
+        [InlineData(1)]
+        [InlineData(2)]
+        [InlineData(4)]
+        [InlineData(8)]
+        [InlineData(16)]
+        public void DifferentProcessorsCountTest_1(int processorCount)
         {
             var inputFile = @"./Integration/TestSample.txt";
             var outputFile = @"./Integration/Compressed";
@@ -19,12 +26,12 @@ namespace Tests.Integration
             try
             {
                 var builder = new Builder(inputFile, outputFile, 4, 4, 32);
-                var compress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Compress, Environment.ProcessorCount);
+                var compress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Compress, processorCount);
                 compress.Start(new CancellationToken());
                 builder.Dispose();
 
                 builder = new Builder(outputFile, result, 4, 4, 32);
-                var decompress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Decompress, Environment.ProcessorCount);
+                var decompress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Decompress, processorCount);
                 decompress.Start(new CancellationToken());
                 builder.Dispose();
 
