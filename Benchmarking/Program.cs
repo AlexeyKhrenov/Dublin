@@ -6,7 +6,7 @@ namespace Benchmarking
     {
         static void Main(string[] args)
         {
-            BenchmarkRunner.Run<CompressDecompressBenchmarking>();
+            BenchmarkRunner.Run<CompressVsDecompressBenchmarking>();
         }
     }
 }

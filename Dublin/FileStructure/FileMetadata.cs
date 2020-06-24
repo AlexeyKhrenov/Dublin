@@ -88,6 +88,11 @@ namespace Dublin.FileStructure
             }
         }
 
+        public void OrderRecordsByStartCompressed()
+        {
+            Records = new Queue<MetadataRecord>(Records.OrderBy(x => x.StartCompressed));
+        }
+
         /// <summary>
         /// Writes current metadata state at the end of the stream. 
         /// Sets stream position at the end of the stream after write.

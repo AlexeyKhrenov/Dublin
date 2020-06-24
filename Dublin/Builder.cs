@@ -68,7 +68,7 @@ namespace Dublin
 
         public void Clearup()
         {
-            Directory.Delete(outputFile);
+            File.Delete(outputFile);
         }
 
         public void Dispose()
