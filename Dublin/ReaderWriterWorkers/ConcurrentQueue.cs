@@ -11,6 +11,9 @@ namespace Dublin.ReaderWriterWorkers
         private readonly int maxSize;
         private volatile bool closed;
 
+        private int enqueueed;
+        private int dequeued;
+
         public bool IsEmpty => queue.Count == 0;
 
         public ConcurrentQueue(int maxSize)
@@ -27,6 +30,7 @@ namespace Dublin.ReaderWriterWorkers
                     Monitor.Wait(queue);
                 }
                 queue.Enqueue(item);
+                enqueueed++;
 
                 Monitor.PulseAll(queue);
             }
@@ -51,6 +55,9 @@ namespace Dublin.ReaderWriterWorkers
                 {
                     Monitor.PulseAll(queue);
                 }
+
+                dequeued++;
+                
                 return true;
             }
         }

@@ -21,6 +21,8 @@ namespace Dublin.ReaderWriterWorkers
             int blockSize) : base(input, output, readQueueSize, writeQueueSize, blockSize)
         {
             FileMetadata = new FileMetadata();
+
+            maxNumberOfBlocks = (int) (input.Length / blockSize);
         }
 
         public override void ReadNext()
@@ -34,6 +36,8 @@ namespace Dublin.ReaderWriterWorkers
             input.Read(block.Content, 0, nextBlockSize);
 
             ReadQueue.Enqueue(block);
+
+            readBlocks++;
         }
 
         public override bool TryWriteNext()
@@ -49,6 +53,12 @@ namespace Dublin.ReaderWriterWorkers
 
                 output.Write(block.Content, 0, block.Size);
                 FileMetadata.AddRecord(block.Metadata);
+
+                if (numberOfBlocks + 1 != FileMetadata.Records.Count)
+                {
+                    throw new InvalidOperationException();
+                }
+                
                 return true;
             }
 

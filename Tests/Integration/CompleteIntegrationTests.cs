@@ -18,12 +18,12 @@ namespace Tests.Integration
 
             try
             {
-                var builder = new Builder(inputFile, outputFile, 4, 4, 32);
+                var builder = new Builder(inputFile, outputFile, 4, 4, 32, null);
                 var compress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Compress, Environment.ProcessorCount);
                 compress.Start(new CancellationToken());
                 builder.Dispose();
 
-                builder = new Builder(outputFile, result, 4, 4, 32);
+                builder = new Builder(outputFile, result, 4, 4, 32, null);
                 var decompress = builder.BuildOrchestrator(System.IO.Compression.CompressionMode.Decompress, Environment.ProcessorCount);
                 decompress.Start(new CancellationToken());
                 builder.Dispose();

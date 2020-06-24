@@ -12,9 +12,14 @@ namespace Dublin
 
         public ConcurrentQueue<Block> WriteQueue { get; private set; }
 
+        public Action<int> ReportPercentage { get; set; }
+
         protected Stream input;
         protected Stream output;
         protected int blockSize;
+        protected int numberOfBlocks;
+        protected int readBlocks;
+        protected int maxNumberOfBlocks;
 
         protected virtual bool CanRead => input.Position != input.Length;
 
@@ -43,7 +48,10 @@ namespace Dublin
 
                 while (!WriteQueue.IsEmpty && !ReadQueue.IsEmpty)
                 {
-                    TryWriteNext();
+                    if (TryWriteNext())
+                    {
+                        ReportNextBlockProgress();
+                    }
                 }
 
                 ReadNext();
@@ -53,6 +61,7 @@ namespace Dublin
 
             while (TryWriteNext())
             {
+                ReportNextBlockProgress();
             }
 
             Finish();
@@ -69,6 +78,13 @@ namespace Dublin
         public void Close()
         {
             WriteQueue.Close();
+        }
+
+        protected void ReportNextBlockProgress()
+        {
+            numberOfBlocks++;
+            var percentage = (int)((double)numberOfBlocks / (double)maxNumberOfBlocks * 100);
+            ReportPercentage?.Invoke(percentage);
         }
     }
 }

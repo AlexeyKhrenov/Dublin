@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 
 using Microsoft.Extensions.Configuration;
+using ShellProgressBar;
 
 [assembly: InternalsVisibleTo("Benchmarking")]
 [assembly: InternalsVisibleTo("Tests")]
@@ -13,6 +14,8 @@ namespace Dublin
 {
     class Program
     {
+        private static ProgressBar progressBar;
+        
         static void Main(string[] args)
         {
             Builder builder = null;
@@ -27,21 +30,21 @@ namespace Dublin
                 var mode = ParseCompressDecomress(args[0]);
 
                 var conf = GetConfiguration();
+                progressBar = new ProgressBar(100, string.Empty);
 
                 builder = new Builder(
                     args[1],
                     args[2],
                     GetValueFromConfig(conf, "ReadQueueSize"),
                     GetValueFromConfig(conf, "WriteQueueSize"),
-                    GetValueFromConfig(conf, "BlockSize"));
+                    GetValueFromConfig(conf, "BlockSize"),
+                    x => ReportProgress(x));
 
                 var orc = builder.BuildOrchestrator(mode, Environment.ProcessorCount);
 
                 var cts = new CancellationTokenSource();
                 var orcThread = new Thread(() => orc.Start(cts.Token));
                 orcThread.Start();
-
-                Console.WriteLine("Started processing, press any key to cancel");
 
                 while (true)
                 {
@@ -79,6 +82,23 @@ namespace Dublin
             Console.ReadKey();
         }
 
+        private static bool isFinalizing;
+        private static void ReportProgress(int percentage)
+        {
+            if (progressBar.EndTime == null)
+            {
+                progressBar.Tick(percentage, "Compress/decompress operation is in progress. Press any key to exit");
+                    
+                if (percentage == 100)
+                {
+                    var d = progressBar.EndTime;
+                    progressBar.Dispose();
+                    isFinalizing = true;
+                    Console.WriteLine("Finalizing read/write operations");
+                }
+            }
+        }
+
         /// <summary>
         /// returns true if compress
         /// </summary>
@@ -99,6 +119,7 @@ namespace Dublin
 
         private static void Error(Exception ex)
         {
+            progressBar?.Dispose();
             Console.WriteLine("ERROR: " + ex.Message);
         }
 

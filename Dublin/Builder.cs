@@ -15,8 +15,10 @@ namespace Dublin
         private int readQueueSize = 0;
         private int writeQueueSize = 0;
         private int blockSize = 0;
+        private Action<int> reportPercentage;
 
-        public Builder(string inputFile, string outputFile, int readQueueSize, int writeQueueSize, int blockSize)
+        public Builder(string inputFile, string outputFile, int readQueueSize, int writeQueueSize, int blockSize,
+            Action<int> reportPercentage)
         {
             if (!File.Exists(inputFile))
             {
@@ -33,6 +35,7 @@ namespace Dublin
             this.readQueueSize = readQueueSize;
             this.writeQueueSize = writeQueueSize;
             this.blockSize = blockSize;
+            this.reportPercentage = reportPercentage;
 
             inputStream = new FileStream(inputFile, FileMode.Open, FileAccess.Read);
             outputStream = new FileStream(outputFile, FileMode.Create, FileAccess.Write);
@@ -41,7 +44,7 @@ namespace Dublin
         public Orchestrator BuildOrchestrator(CompressionMode compressionMode, int processorCount)
         {
             IReaderWriter readerWriter;
-            IGzipWorker[] workers = new IGzipWorker[Environment.ProcessorCount];
+            IGzipWorker[] workers = new IGzipWorker[processorCount];
 
             switch (compressionMode)
             {
@@ -62,6 +65,8 @@ namespace Dublin
                 default:
                     throw new InvalidOperationException("Unknown compression mode");
             }
+            
+            readerWriter.ReportPercentage = reportPercentage;
 
             return new Orchestrator(workers, readerWriter);
         }

@@ -42,7 +42,6 @@ namespace Dublin.GzipWorkers
                 var compressedBytes = compressedStream.ToArray();
 
                 var result = Block.CreateCompressedBlock(source, compressedBytes);
-                WriteQueue.Enqueue(result);
                 return result;
             }
         }

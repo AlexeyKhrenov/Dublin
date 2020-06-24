@@ -17,5 +17,7 @@ namespace Dublin.ReaderWriterWorkers
         void Process(CancellationToken ct);
 
         void Close();
+
+        Action<int> ReportPercentage { get; set; }
     }
 }

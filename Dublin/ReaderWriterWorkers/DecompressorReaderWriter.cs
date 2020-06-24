@@ -14,7 +14,7 @@ namespace Dublin.ReaderWriterWorkers
 
         private bool _canRead;
         protected override bool CanRead => _canRead;
-
+        
         public DecompressorReaderWriter(
             Stream input,
             Stream output,
@@ -25,6 +25,7 @@ namespace Dublin.ReaderWriterWorkers
             fileMetadata = new FileMetadata();
             fileMetadata.Read(input);
             _canRead = true;
+            maxNumberOfBlocks = fileMetadata.Records.Count;
         }
 
         public override void ReadNext()
@@ -54,6 +55,7 @@ namespace Dublin.ReaderWriterWorkers
 
                 output.Position = block.Metadata.Start;
                 output.Write(block.Content, 0, block.Size);
+                
                 return true;
             }
 
